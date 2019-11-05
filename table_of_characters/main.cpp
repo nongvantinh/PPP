@@ -26,21 +26,47 @@ void value_get_so_far()
     string unit;
     double m_to_cm{100};
     double in_to_cm{2.54};
-    double ft_to_in{12;
+    double ft_to_in{12};
     while (cin >> value >> unit)
     {
+        vector<double> list_value;
+        list_value.push_back(value);
 
-        cout << "the value is: " << value << unit << '\n';
-        if (a <= value)
+        double sum_in_meters(0.0);
+
+        if (unit == "cm")
         {
-            a = value;
-            cout << "the largest so far: " << a << '\n';
+            sum_in_meters += value * m_to_cm;
+        }
+        else if (unit == "in")
+        {
+            sum_in_meters += (value * in_to_cm) / m_to_cm;
+        }
+        else if (unit == "ft")
+        {
+            sum_in_meters += ((value * ft_to_in) * in_to_cm) / m_to_cm;
+        }
+        else if (unit == "m")
+        {
+            sum_in_meters += value;
         }
         else
         {
-            b = value;
-            cout << "the smallest so far: " << b << '\n';
+            cout << "You've entered wrong type.\n";
         }
+
+        if (a <= sum_in_meters)
+            a = sum_in_meters;
+        else
+            b = sum_in_meters;
+        sort(list_value);
+        cout << "the smallest: " << b << '\n';
+        cout << "the largest: " << a << '\n';
+        cout << "the number of value is: " << list_value.size() << '\n';
+        double sum{0.0};
+        for (double &i : list_value)
+            sum += i;
+        cout << "the sum of value is: " << sum << '\n';
     }
 }
 
