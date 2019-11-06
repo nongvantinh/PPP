@@ -45,7 +45,7 @@ void value_get_so_far()
         else if (unit == "ft")
         {
             sum_in_meters += ((value * ft_to_in) * in_to_cm) / m_to_cm;
-        }
+        }   
         else if (unit == "m")
         {
             sum_in_meters += value;
