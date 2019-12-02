@@ -102,6 +102,9 @@ vector<Position> detech_subarray(const vector<double>& arr) {
 }
 
 vector<Position> update_subarray(vector<Position>& arr, Position subarray) {
+	if (!arr.size())
+	throw runtime_error("array is empty.\n");
+
     if (arr[0] < subarray) {  // compare with the current largest subarray.
         arr.clear();  // This subarray is the largest. Remove the old return the
                       // largest.
@@ -112,6 +115,8 @@ vector<Position> update_subarray(vector<Position>& arr, Position subarray) {
 }
 
 void print_arr(vector<double>& arr, const Position& pos) {
+	if(!arr.size())
+	throw runtime_error("array is empty.\n");
     for (int i(pos.begin()); i <= pos.end(); ++i) {
         cout << "arr[" << i << ']' << arr[i] << endl;
     }
