@@ -1,7 +1,9 @@
 #include <chrono>
 #include <iostream>
 #include <vector>
+
 #define DEBUG(x) cout << '>' << #x << ':' << x << '\n';
+
 using namespace std;
 using namespace std::chrono;
 
@@ -9,19 +11,30 @@ class Position {
    public:
     Position() : m_begin(0), m_end(0){};
     Position(int begin) : m_begin(begin){};
-    Position(int begin, int end) : m_begin(begin), m_end(end){};
-    int begin() { return m_begin; }
-    void set_begin(int begin) { m_begin = begin; }
-    int end() { return m_end; }
-    void set_end(int end) { m_end = end; }
-    int distance() { return end() - begin(); }
-    inline bool operator<(Position& pos) {
+    Position(int begin, int end) : m_begin(begin), m_end(end) {
+        if (begin < 0)
+            throw runtime_error("negative value for begin of array.\n");
+        if (end < 0) throw runtime_error("negative value for end of array.\n");
+    };
+    int begin() const { return m_begin; }
+    void set_begin(int begin) {
+        if (begin < 0)
+            throw runtime_error("negative value for begin of array.\n");
+        m_begin = begin;
+    }
+    int end() const { return m_end; }
+    void set_end(int end) {
+        if (end < 0) throw runtime_error("negative value for end of array.\n");
+        m_end = end;
+    }
+    int distance() const { return end() - begin(); }
+    inline bool operator<(Position& pos) const {
         return this->distance() < pos.distance();
     }
-    inline bool operator>(Position& pos) {
+    inline bool operator>(Position& pos) const {
         return this->distance() > pos.distance();
     }
-    inline bool operator==(Position& pos) {
+    inline bool operator==(Position& pos) const {
         return this->distance() == pos.distance();
     }
 
@@ -31,9 +44,9 @@ class Position {
 };
 
 // return the position of subarray in list.
-vector<Position> detech_subarray(vector<double>&);
+vector<Position> detech_subarray(const vector<double>&);
 vector<Position> update_subarray(vector<Position>&, Position);
-void print_arr(vector<double>&, Position);
+void print_arr(vector<double>&, const Position&);
 
 int main() {
     cout << "find the largest subarray in list.\n";
@@ -50,8 +63,7 @@ int main() {
     // Get ending timepoint
     auto stop = high_resolution_clock::now();
     auto duration = duration_cast<microseconds>(stop - start);
-    cout << "Time taken by function: " << duration.count() << " microseconds"
-         << endl;
+    cout << "Time taken by function: " << duration.count() << " microseconds\n";
 
     for (Position& pos : list_pos) {
         cout << "This subarray.\n";
@@ -64,9 +76,9 @@ int main() {
 /// @brief
 /// This function will find the length of the largest subarray in "arr".
 /// @param arr : The array we want to find the largest subarray.
-/// @return : return the position of the largest subarray in arr. Or a vector of
+/// @return : return a vector position of the largest subarray in arr or largest
 /// subarray have equal length.
-vector<Position> detech_subarray(vector<double>& arr) {
+vector<Position> detech_subarray(const vector<double>& arr) {
     vector<Position> pos(1);
     Position largest;
 
@@ -90,15 +102,16 @@ vector<Position> detech_subarray(vector<double>& arr) {
 }
 
 vector<Position> update_subarray(vector<Position>& arr, Position subarray) {
-    if (arr[0] < subarray) {
-        arr.clear();
+    if (arr[0] < subarray) {  // compare with the current largest subarray.
+        arr.clear();  // This subarray is the largest. Remove the old return the
+                      // largest.
         arr.push_back(subarray);
-    } else if (arr[0] == subarray)
+    } else if (arr[0] == subarray)  // two subarrays have same length.
         arr.push_back(subarray);
     return arr;
 }
 
-void print_arr(vector<double>& arr, Position pos) {
+void print_arr(vector<double>& arr, const Position& pos) {
     for (int i(pos.begin()); i <= pos.end(); ++i) {
         cout << "arr[" << i << ']' << arr[i] << endl;
     }
