@@ -83,7 +83,7 @@ vector<Position> detech_subarray(const vector<double>& arr) {
     Position largest;
 
     // walk through the vector and get the largest subarray.
-    for (int i(arr[1]); i < arr.size(); ++i) {
+    for (int i(1); i < arr.size(); ++i) {
         if (arr[i - 1] <= arr[i])
             // length of this subarray keep grow up. Update it.
             largest.set_end(i);
