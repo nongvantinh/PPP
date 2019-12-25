@@ -1,5 +1,12 @@
-// This program work doesn't quite right.
+// This program doesn't work quite right.
 #include "../std_lib_facilities.h"
+/**
+ * @file main.cpp
+ * @brief 
+ * @author Nong Tinh <vannongtinh@gmail.com>
+ * @version 1.0
+ * @date 2019-12-13
+ */
 
 int guessing(int, int);
 int check_corner(int min, int max);
