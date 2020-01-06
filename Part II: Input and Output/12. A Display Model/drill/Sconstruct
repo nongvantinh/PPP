@@ -1,0 +1,24 @@
+import os, subprocess
+opts = Variables([], ARGUMENTS)
+
+env = DefaultEnvironment()
+opts.Add(PathVariable('target_path', 'The path where the lib is installed.', 'bin/'))
+opts.Add(PathVariable('target_name', 'The library name.', 'libgdexample', PathVariable.PathAccept))
+source_path = "src/"
+headers_path = "include/"
+# target_path = "bin/"
+target_name = "main"
+libs_path = "lib/"
+
+opts.Update(env)
+
+env.Append(CPPPATH = [ '.', headers_path, source_path, libs_path])
+fltk_lib = [ "/usr/include/cairo", "/usr/include/glib-2.0", "/usr/lib/x86_64-linux-gnu/glib-2.0/include", "/usr/include/pixman-1", "/usr/include/freetype2", "/usr/include/libpng16" ,"/usr/include/freetype2", "/usr/include/cairo", "/usr/include/glib-2.0", "/usr/lib/x86_64-linux-gnu/glib-2.0/include", "/usr/include/pixman-1", "/usr/include/freetype2" , "/usr/include/libpng16" ]
+env.Append(CPPPATH = fltk_lib)
+
+env.Append(CCFLAGS = ['-g', '-O2', '-fstack-protector-strong', '-Wformat', '-Werror=format-security', '-fvisibility-inlines-hidden','-z','relro',  '-z', 'now'])
+env.Append(LINKFLAGS = ["fltk", "X11"])
+sources = Glob('src/*.cpp')
+program = env.Program(target = env["target_path"] + env["target_name"], source = sources)
+
+Default(program)
