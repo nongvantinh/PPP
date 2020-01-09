@@ -1,1 +1,15 @@
-Program('main.cpp')
+env = Environment()
+include = "/usr/include/"
+
+env.Append(CPPPATH = [include + "cairo", include + "glib-2.0", include + "pixman-1", include + "freetype2", include + "libpng16", "/usr/lib/x86_64-linux-gnu/glib-2.0/include"])
+
+env.Append(CCFLAGS=['-fPIC', '-g', '-O3'])
+
+env.Append(CPPDEFINES=['_LARGEFILE_SOURCE', '_LARGEFILE64_SOURCE', '_THREAD_SAFE', '_REENTRANT'])
+
+env.Append(CCFLAGS=['-fstack-protector-strong', '-Wformat', '-Werror=format-security', '-fvisibility-inlines-hidden'])
+
+env.Append(LIBS = ["fltk_images", "fltk", "X11"])
+sources = Glob('src/*.cpp')
+build = env.Program(target = "main", source = sources)
+Default(build)
