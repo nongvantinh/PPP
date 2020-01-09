@@ -27,6 +27,7 @@ namespace Graph_lib {
 
 //------------------------------------------------------------------------------
 
+
     class Widget {
     // Widget is a handle to an Fl_widget - it is *not* an Fl_widget
     // We try to keep our interface classes at arm's length from FLTK
@@ -35,6 +36,8 @@ namespace Graph_lib {
             : loc(xy), width(w), height(h), label(s), do_it(cb)
         {}
 
+        virtual ~Widget() { }
+        
         virtual void move(int dx,int dy) { hide(); pw->position(loc.x+=dx, loc.y+=dy); show(); }
         virtual void hide() { pw->hide(); }
         virtual void show() { pw->show(); }
@@ -46,25 +49,25 @@ namespace Graph_lib {
         string label;
         Callback do_it;
 
-        virtual ~Widget() { }
+
 
     protected:
         Window* own;    // every Widget belongs to a Window
         Fl_Widget* pw;  // connection to the FLTK Widget
-    private:
-        Widget& operator=(const Widget&); // don't copy Widgets
-        Widget(const Widget&);
+
     };
+
 
 //------------------------------------------------------------------------------
 
-    struct Button : Widget {
-        Button(Point xy, int w, int h, const string& label, Callback cb)
+class Button : public Widget {
+public:
+	Button(Point xy, int w, int h, const string& label, Callback cb)
             : Widget(xy,w,h,label,cb)
         {}
 
-        void attach(Window&);
-    };
+        void attach(Window& win);
+};
 
 //------------------------------------------------------------------------------
 
@@ -87,14 +90,11 @@ namespace Graph_lib {
 
         void attach(Window& win);
     };
-
 //------------------------------------------------------------------------------
-
-    struct Menu : Widget {
+    
+struct Menu : Widget {
         enum Kind { horizontal, vertical };
-        Menu(Point xy, int w, int h, Kind kk, const string& label)
-            : Widget(xy,w,h,label,0), k(kk), offset(0)
-        {}
+        Menu(Point xy, int w, int h, Kind kk, const string& label);
 
         Vector_ref<Button> selection;
         Kind k;
@@ -107,24 +107,13 @@ namespace Graph_lib {
             for (unsigned int i = 0; i<selection.size(); ++i)
                 selection[i].show();
         }
-        void hide()                 // hide all buttons
-        {
-            for (unsigned int i = 0; i<selection.size(); ++i) 
-                selection[i].hide(); 
-        }
-        void move(int dx, int dy)   // move all buttons
-        {
-            for (unsigned int i = 0; i<selection.size(); ++i) 
-                selection[i].move(dx,dy);
-        }
+        void hide();                 // hide all buttons
+       
+        void move(int dx, int dy);   // move all buttons
 
-        void attach(Window& win)    // attach all buttons
-        {
-            for (int i=0; i<selection.size(); ++i) win.attach(selection[i]);
-            own = &win;
-        }
+        void attach(Window& win);    // attach all buttons
 
-    };
+};
 
 //------------------------------------------------------------------------------
 

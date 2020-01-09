@@ -1,24 +1,17 @@
-import os, subprocess
-opts = Variables([], ARGUMENTS)
+env = Environment()
+include = "/usr/include/"
+my_headers = "include/"
+images_loca = "images/"
+env.Append(CPPPATH = [images_loca, my_headers, include + "cairo", include + "glib-2.0", include + "pixman-1", include + "freetype2", include + "libpng16", "/usr/lib/x86_64-linux-gnu/glib-2.0/include"])
 
-env = DefaultEnvironment()
-opts.Add(PathVariable('target_path', 'The path where the lib is installed.', 'bin/'))
-opts.Add(PathVariable('target_name', 'The library name.', 'libgdexample', PathVariable.PathAccept))
-source_path = "src/"
-headers_path = "include/"
-# target_path = "bin/"
-target_name = "main"
-libs_path = "lib/"
+env.Append(CCFLAGS = Split("-g -O2 -fstack-protector-strong -Wformat -Werror=format-security -fvisibility-inlines-hidden"))
 
-opts.Update(env)
+env.Append(CPPDEFINES= Split("_LARGEFILE_SOURCE _LARGEFILE64_SOURCE _THREAD_SAFE _REENTRANT"))
 
-env.Append(CPPPATH = [ '.', headers_path, source_path, libs_path])
-fltk_lib = [ "/usr/include/cairo", "/usr/include/glib-2.0", "/usr/lib/x86_64-linux-gnu/glib-2.0/include", "/usr/include/pixman-1", "/usr/include/freetype2", "/usr/include/libpng16" ,"/usr/include/freetype2", "/usr/include/cairo", "/usr/include/glib-2.0", "/usr/lib/x86_64-linux-gnu/glib-2.0/include", "/usr/include/pixman-1", "/usr/include/freetype2" , "/usr/include/libpng16" ]
-env.Append(CPPPATH = fltk_lib)
+env.Append(LIBS = ["fltk_images", "fltk", "X11"])
 
-env.Append(CCFLAGS = ['-g', '-O2', '-fstack-protector-strong', '-Wformat', '-Werror=format-security', '-fvisibility-inlines-hidden','-z','relro',  '-z', 'now'])
-env.Append(LINKFLAGS = ["fltk", "X11"])
+env.Append(LINKFLAGS = ["-Wl,-Bsymbolic-functions", "-Wl,-z,relro", "-Wl,-z,now", "-Wl,--as-needed"])
+
 sources = Glob('src/*.cpp')
-program = env.Program(target = env["target_path"] + env["target_name"], source = sources)
-
-Default(program)
+build = env.Program(target = "main", source = sources)
+Default(build)
