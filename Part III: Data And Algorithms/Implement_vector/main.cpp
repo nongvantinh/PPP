@@ -3,22 +3,60 @@
 class Vector
 {
 public:
+    int size() const
+    {
+        return m_size;
+    }
+
     Vector() : m_elem(nullptr), m_size(0)
     {
     }
-    Vector(int p_size) : m_elem(new double[p_size]), m_size(p_size)
+    explicit Vector(int p_size) : m_elem(new double[p_size]), m_size(p_size)
     {
         for (int i(0); i < size(); ++i) // Don't forget to initialize elements.
         {
             m_elem[i] = 0.0;
         }
     }
+    Vector(const Vector &arg)
+        : m_size(arg.size()), m_elem(new double[size()])
+    {
+        std::copy(arg.m_elem, arg.size(), m_elem);
+    }
 
+    Vector(std::initializer_list<double> lst)
+        : m_size(lst.size()), m_elem(new double[size()])
+    {
+        std::copy(lst.begin(), lst.end(), m_elem);
+    }
+    Vector(Vector &&arg)
+        : m_size(arg.size), m_elem(arg.m_elem)
+    {
+        arg.m_size = 0;
+        arg.m_elem = nullptr;
+    }
+    Vector &operator=(const Vector &arg)
+    {
+        double *p = new double[arg.size()];
+        std::copy(arg.m_elem, arg.m_elem + arg.size(), m_elem);
+        delete[] m_elem;
+        m_elem = p;
+        m_size = arg.size();
+        return *this;
+    }
+    double &operator[](int index)
+    {
+        return m_elem[index];
+    }
+    double &operator[](int index) const
+    {
+        return m_elem[index];
+    }
     ~Vector()
     {
         delete[] m_elem;
     }
-    double get_elem(int p_index)
+    double get_elem(int p_index) const
     {
         if (p_index < 0)
             throw std::runtime_error("Negative index.\n");
@@ -30,11 +68,6 @@ public:
         if (p_index < 0)
             throw std::runtime_error("Negative p_index.\n");
         m_elem[p_index] = value;
-    }
-
-    int size()
-    {
-        return m_size;
     }
 
 private:
