@@ -8,7 +8,7 @@ env.Append(CCFLAGS = Split("-std=c++17 -g -O2 -fstack-protector-strong -Wall -We
 
 env.Append(CPPDEFINES= Split("_LARGEFILE_SOURCE _LARGEFILE64_SOURCE _THREAD_SAFE _REENTRANT"))
 
-env.Append(LIBS = ["fltk_images", "fltk", "X11"])
+env.Append(LIBS = Split("fltk_images fltk_jpeg fltk_png fltk_z fltk X11")
 
 env.Append(LIBPATH = [lib_path + "cairo", lib_path + "glib-2.0", lib_path + "pixman-1", lib_path + "freetype2", lib_path + "libpng16", "/usr/lib/x86_64-linux-gnu/glib-2.0/include"])
 
