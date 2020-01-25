@@ -17,7 +17,7 @@
                 "kind": "test",
                 "isDefault": true
             },
-            "command": "scons && ./main"
+            "command": "scons -Q && ./main"
            
         }
     ]

@@ -15,5 +15,6 @@ env.Append(LIBPATH = [lib_path + "cairo", lib_path + "glib-2.0", lib_path + "pix
 env.Append(LINKFLAGS = ["-Wl,-Bsymbolic-functions", "-Wl,-z,relro", "-Wl,-z,now", "-Wl,--as-needed"])
 
 sources = Glob('src/*.cpp')
-build = env.Program(target = "main", source = sources)
+build = env.Program(target = "bin/main", source = sources)
 Default(build)
+
