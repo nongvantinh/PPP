@@ -3,11 +3,8 @@
 #define GRAPH_GUARD 1
 
 #include "Point.h"
-#include<vector>
-//#include<string>
-//#include<cmath>
 #include "fltk.h"
-//#include "std_lib_facilities.h"
+#include "std_lib_facilities.h"
 
 namespace Graph_lib {
 // defense against ill-behaved Linux macros:
@@ -33,8 +30,8 @@ struct Color {
 	char visibility() const { return v; }
 	void set_visibility(Transparency vv) { v=vv; }
 private:
-	unsigned char v;	// 0 or 1 for now
 	Fl_Color c;
+	unsigned char v;	// 0 or 1 for now
 };
 
 struct Line_style {
@@ -99,7 +96,7 @@ public:
 			if (d) push_back(d);
 	}
 
-	~Vector_ref() { for (int i=0; i<owned.size(); ++i) delete owned[i]; }
+	~Vector_ref() { for (unsigned int i=0; i<owned.size(); ++i) delete owned[i]; }
 
 	void push_back(T& s) { v.push_back(&s); }
 	void push_back(T* p) { v.push_back(p); owned.push_back(p); }
@@ -156,7 +153,7 @@ public:
 	Shape& operator=(const Shape&) = delete;
 private:
 	vector<Point> points;	// not used by all shapes
-	Color lcolor {fl_color()};
+	Color lcolor {Fl_Color()};
 	Line_style ls {0};
 	Color fcolor {Color::invisible};
 
@@ -205,8 +202,8 @@ struct Rectangle : Shape {
 	int height() const { return h; }
 	int width() const { return w; }
 private:
-	int h;			// height
 	int w;			// width
+	int h;			// height
 //	Color fcolor;	// fill color; 0 means "no fill"
 };
 

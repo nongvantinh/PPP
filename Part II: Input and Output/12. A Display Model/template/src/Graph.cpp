@@ -297,7 +297,7 @@ int init_suffix_map()
 Suffix::Encoding get_encoding(const string& s)
 		// try to deduce type from file name using a lookup table
 {
-	static int x = init_suffix_map();
+	init_suffix_map();
 
 	string::const_iterator p = find(s.begin(),s.end(),'.');
 	if (p==s.end()) return Suffix::none;	// no suffix
@@ -310,7 +310,7 @@ bool can_open(const string& s)
             // check if a file named s exists and can be opened for reading
 {
 	ifstream ff(s.c_str());
-	return ff;
+	return ff.is_open();
 }
 
 
